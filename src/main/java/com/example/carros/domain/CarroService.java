@@ -31,4 +31,22 @@ public class CarroService {
     public Iterable<Carro> findByTipo(String tipo) {
         return rep.findByTipo(tipo);
     }
+
+    public Carro insert(Carro carro) {
+        return rep.save(carro);
+    }
+
+    public Carro update(Carro carro, Long id) {
+        return getById(id).map(dbCarro -> {
+            dbCarro.setNome(carro.getNome());
+            dbCarro.setTipo(carro.getTipo());
+            return rep.save(dbCarro);
+        }).orElseThrow(() -> new RuntimeException("Não foi possível atualizar o registro"));
+    }
+
+    public void delete(Long id) {
+        getById(id).ifPresent(carro -> {
+            rep.deleteById(id);
+        });
+    }
 }
