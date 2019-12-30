@@ -14,6 +14,7 @@ public class CarroService {
 
     @Autowired
     private CarroRepository rep;
+    private Object Optional;
 
     public List<CarroDTO> getCarros() {
         return rep.findAll().stream().map(CarroDTO::create).collect(Collectors.toList());
@@ -39,17 +40,18 @@ public class CarroService {
         return rep.save(carro);
     }
 
-    public Carro update(Carro carro, Long id) {
+    public Optional<Carro> update(Carro carro, Long id) {
         return getById(id).map(dbCarro -> {
             dbCarro.setNome(carro.getNome());
             dbCarro.setTipo(carro.getTipo());
             return rep.save(dbCarro);
-        }).orElseThrow(() -> new RuntimeException("Não foi possível atualizar o registro"));
+        });
     }
 
-    public void delete(Long id) {
-        getById(id).ifPresent(carro -> {
+    public boolean delete(Long id) {
+        return getById(id).map(carro -> {
             rep.deleteById(id);
-        });
+            return true;
+        }).orElse(false);
     }
 }
