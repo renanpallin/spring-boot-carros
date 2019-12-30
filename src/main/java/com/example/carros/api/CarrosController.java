@@ -2,9 +2,11 @@ package com.example.carros.api;
 
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
+import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,17 +17,17 @@ public class CarrosController {
     private CarroService carroService;
 
     @GetMapping
-    public Iterable<Carro> get(){
+    public List<CarroDTO> get(){
         return carroService.getCarros();
     }
 
     @GetMapping("/{id}")
-    public Optional<Carro> getById(@PathVariable Long id) {
-        return carroService.getById(id);
+    public Optional<CarroDTO> getById(@PathVariable Long id) {
+        return carroService.getById(id).map(CarroDTO::new);
     }
 
     @GetMapping("/tipo/{tipo}")
-    public Iterable<Carro> getByTipo(@PathVariable String tipo) {
+    public List<CarroDTO> getByTipo(@PathVariable String tipo) {
         return carroService.findByTipo(tipo);
     }
 
