@@ -23,7 +23,7 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public Optional<CarroDTO> getById(@PathVariable Long id) {
-        return carroService.getById(id).map(CarroDTO::new);
+        return carroService.getById(id).map(CarroDTO::create);
     }
 
     @GetMapping("/tipo/{tipo}")
