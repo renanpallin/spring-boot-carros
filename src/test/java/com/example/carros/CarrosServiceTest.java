@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class CarrosApplicationTests {
+class CarrosServiceTest {
 
     @Autowired
     private CarroService service;

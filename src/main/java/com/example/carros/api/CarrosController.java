@@ -3,6 +3,7 @@ package com.example.carros.api;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,16 @@ public class CarrosController {
     private CarroService carroService;
 
     @GetMapping
-    public List<CarroDTO> get(){
+    public List<CarroDTO> get() {
         return carroService.getCarros();
     }
 
     @GetMapping("/{id}")
-    public Optional<CarroDTO> getById(@PathVariable Long id) {
-        return carroService.getById(id).map(CarroDTO::create);
+    public ResponseEntity<CarroDTO> getById(@PathVariable Long id) {
+        return carroService
+                .getById(id)
+                .map(c -> ResponseEntity.ok(CarroDTO.create(c)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/tipo/{tipo}")
@@ -53,7 +57,7 @@ public class CarrosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity put(@PathVariable Long id,  @RequestBody Carro carro) {
+    public ResponseEntity put(@PathVariable Long id, @RequestBody Carro carro) {
         return carroService.update(carro, id).map(
                 updatedCarro -> ResponseEntity.ok(CarroDTO.create(updatedCarro))
         ).orElse(ResponseEntity.notFound().build());

@@ -21,12 +21,12 @@ public class CarroService {
 
     }
 
-    public List<Carro> getCarrosFake() {
-       List<Carro> carros = new ArrayList<>();
-       carros.add(new Carro(1L, "Fusca", "classico"));
-       carros.add(new Carro(2L, "Fusca 2", "classico"));
-       return carros;
-    }
+//    public List<Carro> getCarrosFake() {
+//       List<Carro> carros = new ArrayList<>();
+//       carros.add(new Carro(1L, "Fusca", "classico"));
+//       carros.add(new Carro(2L, "Fusca 2", "classico"));
+//       return carros;
+//    }
 
     public Optional<Carro> getById(Long id) {
         return rep.findById(id);
