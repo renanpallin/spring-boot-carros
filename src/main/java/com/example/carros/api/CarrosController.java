@@ -3,7 +3,6 @@ package com.example.carros.api;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/carros")
@@ -27,10 +25,7 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CarroDTO> getById(@PathVariable Long id) {
-        return carroService
-                .getById(id)
-                .map(c -> ResponseEntity.ok(CarroDTO.create(c)))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(carroService.getById(id));
     }
 
     @GetMapping("/tipo/{tipo}")
@@ -40,12 +35,8 @@ public class CarrosController {
 
     @PostMapping
     public ResponseEntity<CarroDTO> post(@RequestBody Carro carro) {
-        try {
-            Carro c = carroService.insert(carro);
-            return ResponseEntity.created(getUri(c.getId())).build();
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
-        }
+        Carro c = carroService.insert(carro);
+        return ResponseEntity.created(getUri(c.getId())).build();
     }
 
     private URI getUri(Long id) {
@@ -59,15 +50,13 @@ public class CarrosController {
     @PutMapping("/{id}")
     public ResponseEntity put(@PathVariable Long id, @RequestBody Carro carro) {
         return carroService.update(carro, id).map(
-                updatedCarro -> ResponseEntity.ok(CarroDTO.create(updatedCarro))
+                updatedCarro -> ResponseEntity.ok(updatedCarro)
         ).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
-        return carroService.delete(id)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.notFound().build();
-
+        carroService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
